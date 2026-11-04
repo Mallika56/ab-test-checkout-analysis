@@ -1,0 +1,7 @@
+country,group,users,conversions,conversion_rate
+CA,control,7094,844.0,0.11897
+CA,treatment,7209,810.0,0.11236
+UK,control,35883,4295.0,0.11969
+UK,treatment,35630,4317.0,0.12116
+US,control,100316,12081.0,0.12043
+US,treatment,100558,11898.0,0.11832

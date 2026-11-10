@@ -33,6 +33,7 @@ EXPECTED_PAGE = {"control": "old_page", "treatment": "new_page"}
 
 
 def load_raw() -> pd.DataFrame:
+    """Load the raw experiment log joined with country, flagging misaligned exposures."""
     df = pd.read_csv(RAW / "ab_data.csv", parse_dates=["timestamp"])
     countries = pd.read_csv(RAW / "countries.csv")
     df = df.merge(countries, on="user_id", how="left", validate="many_to_one")
@@ -42,6 +43,8 @@ def load_raw() -> pd.DataFrame:
 
 @dataclass
 class IntegrityReport:
+    """Counts describing the two integrity problems in the raw log (see module docstring)."""
+
     raw_rows: int
     raw_users: int
     misaligned_rows: int
@@ -51,10 +54,12 @@ class IntegrityReport:
     missing_country: int
 
     def as_dict(self) -> dict:
+        """Return the report's fields as a plain dict, for JSON output."""
         return self.__dict__.copy()
 
 
 def integrity_report(raw: pd.DataFrame) -> IntegrityReport:
+    """Compute the IntegrityReport counts (misaligned rows, duplicate users, etc.) from the raw log."""
     per_user = raw.groupby("user_id").agg(rows=("group", "size"), groups=("group", "nunique"))
     dup_ids = set(per_user.index[per_user["rows"] > 1])
     return IntegrityReport(

@@ -52,6 +52,8 @@ def sample_ratio_mismatch(n_control: int, n_treatment: int,
 # --------------------------------------------------------------------- inference
 @dataclass
 class ProportionTest:
+    """Result of a two-proportion z-test: rates, the pooled test statistic, and both CIs."""
+
     conv_control: int
     n_control: int
     conv_treatment: int
@@ -68,6 +70,7 @@ class ProportionTest:
     rel_ci_high: float
 
     def as_dict(self) -> dict:
+        """Return the result's fields as a plain dict with numpy scalars cast to float."""
         return {k: (float(v) if isinstance(v, (np.floating, float)) else v)
                 for k, v in self.__dict__.items()}
 
